@@ -10,7 +10,7 @@ function userauth(req,res,next){
     }
     try{
         const decodeddata = jwt.verify(token,JWT_USER)
-        req.userid = decodeddata
+        req.user = decodeddata
         next()
         
     }
