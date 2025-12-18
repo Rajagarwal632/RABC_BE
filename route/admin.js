@@ -13,7 +13,7 @@ adminroute.get("/" , userauth , roleauth(["admin"]),function(req,res){
     })
 })
 
-adminroute.patch("/assign-role/:id",userauth,roleauth(["admin"]),async function(req,res){
+adminroute.patch("/assign_role/:id",userauth,roleauth(["admin"]),async function(req,res){
     const role = req.body.role
     const userid = req.params.id
 
