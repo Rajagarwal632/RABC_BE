@@ -35,6 +35,32 @@ userroute.post("/signup" , async function(req,res){
         msg : "USER CREATED"
     })
 })
+userroute.post("/signin" , async function(req,res){
+    const email = req.body.email
+    const password = req.body.password
+    const existuser = await usermodel.findOne({
+        email
+    })
+    if(!existuser){
+        return res.status(404).json({
+            msg : "USER NOT EXIST"
+        })
+    }
+    const match = await bcrypt.compare(password,existuser.password)
+    if(match){
+        const token = jwt.sign({
+            userid : existuser._id
+        },JWT_USER)
+        res.json({
+            token
+        })
+    }else{
+        res.json({
+            msg : "INCORRECT PASSWORD"
+        })
+    }
+})
+
 module.exports={
     userroute
 }
