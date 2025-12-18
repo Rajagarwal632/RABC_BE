@@ -14,32 +14,41 @@ adminroute.get("/" , userauth , roleauth(["admin"]),function(req,res){
 })
 
 adminroute.patch("/assign_role/:id",userauth,roleauth(["admin"]),async function(req,res){
-    const role = req.body.role
-    const userid = req.params.id
+    try{
 
-    const validroles = ["admin" , "user" , "moderator"]
-    if(!validroles.includes(role)){
-        return res.status(400).json({
-            msg : "INVALID ROLE"
+        const role = req.body.role
+        const userid = req.params.id
+    
+        const validroles = ["admin" , "user" , "moderator"]
+        if(!validroles.includes(role)){
+            return res.status(400).json({
+                msg : "INVALID ROLE"
+            })
+        }
+        const user = await usermodel.findOneAndUpdate({
+            _id : userid
+        },{
+            role : role,
+        },{
+            new : true
         })
-    }
-    const user = await usermodel.findOneAndUpdate({
-        _id : userid
-    },{
-        role : role,
-    },{
-        new : true
-    })
-    if(!user){
-        return res.status(404).json({
-            msg : "USER NOT FOUND"
+        if(!user){
+            return res.status(404).json({
+                msg : "USER NOT FOUND"
+            })
+        }
+        res.json({
+            msg : "ROLE UPDATED",
+            userid : user._id,
+            newrole : role
         })
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+        msg: "INTERNAL SERVER ERROR",
+        error: error.message
+      })
     }
-    res.json({
-        msg : "ROLE UPDATED",
-        userid : user._id,
-        newrole : role
-    })
 })
 
 module.exports = {
