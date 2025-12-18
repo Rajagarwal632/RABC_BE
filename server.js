@@ -5,11 +5,13 @@ const {userroute} = require("./route/user")
 // const {todoroute} = require("./route/todo")
 const express = require ("express")
 const { adminroute } = require('./route/admin')
+const { modroute } = require('./route/moderator')
 const app = express()
 
 app.use(express.json())
 app.use("/user" , userroute)
 app.use("/admin" , adminroute)
+app.use("/mod" , modroute)
 
 async function main(){
     await mongoose.connect(process.env.MONGO_URL)
