@@ -5,7 +5,7 @@ function userauth(req,res,next){
     const token = req.headers.token
     const decodeddata = jwt.verify(token,JWT_USER)
     if(decodeddata){
-        req.userid = decodeddata.userid
+        req.userid = decodeddata
         next()
     }else{
         res.json({

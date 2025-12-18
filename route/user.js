@@ -65,7 +65,8 @@ userroute.post("/signin", async function (req, res) {
         const match = await bcrypt.compare(password, existuser.password)
         if (match) {
             const token = jwt.sign({
-                userid: existuser._id
+                userid: existuser._id,
+                role : existuser.role
             }, JWT_USER)
             res.json({
                 token
